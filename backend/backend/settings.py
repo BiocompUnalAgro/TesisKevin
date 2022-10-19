@@ -1,10 +1,12 @@
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-txq%tsgz0_*4o*gl4mhl0%hk$xb(p#@2yjuwlz)+)$^u1o*rf0"
-
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = True
 
@@ -12,17 +14,20 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = [
+    "application",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "corsheaders"
+    "corsheaders",
+    #"application.apps.BackConfig",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleWare",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -32,7 +37,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "backend.urls"
+ROOT_URLCONF = "application.urls"
 
 TEMPLATES = [
     {
@@ -52,14 +57,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.postgresql',
+       'NAME': os.getenv('DB'),
+       'USER': os.getenv('USERNAME'),
+       'PASSWORD': os.getenv('PASSWORD'),
+       'HOST': os.getenv('HOST'),
+       'PORT': os.getenv('PORT')
     }
 }
 
@@ -73,7 +78,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
 ]
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "es"
 
 TIME_ZONE = "UTC"
 
@@ -85,3 +90,5 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CORS_ORIGIN_ALLOW_ALL = True
